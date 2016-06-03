@@ -29,7 +29,7 @@ exports.handler = function(event, context, callback) {
 
           for (var i = notDownReplicas.length; i < replicationFactor; i++) {
             console.log("    ... adding new replica (" + i + ")");
-            request(url + "/admin/collections?action=ADDREPLICA&collection=" + collectionName + "&shard=" + shardName + "&async=" + collectionName + shardName + i);
+            request(url + "/admin/collections?action=ADDREPLICA&collection=" + collectionName + "&shard=" + shardName);
           }
 
           if ( activeReplicas.length > replicationFactor ) {
@@ -37,7 +37,7 @@ exports.handler = function(event, context, callback) {
 
             replicasToDestroy.forEach(function(replicaName) {
               console.log("    ... removing replica (" + replicaName + ")");
-              request(url + "/admin/collections?action=DELETEREPLICA&collection=" + collectionName + "&shard=" + shardName + "&replica=" + replicaName + "async=" + collectionName + shardName + i);
+              request(url + "/admin/collections?action=DELETEREPLICA&collection=" + collectionName + "&shard=" + shardName + "&replica=" + replicaName);
             });
           }
         });
