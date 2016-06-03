@@ -1,0 +1,16 @@
+{
+  "name": "solrcloud-scale",
+  "version": "0.0.1",
+  "description": "Autoscaling SolrCloud collections",
+  "main": "index.js",
+  "dependencies": {
+    "request": "^2.72.0",
+    "shuffle-array": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node test.js"
+  },
+  "author": "Chris Beer <chris@cbeer.info",
+  "license": "ISC"
+}

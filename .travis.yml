@@ -1,0 +1,21 @@
+language: node_js
+
+node_js:
+- '4.3'
+
+before_deploy:
+  - echo $TRAVIS_COMMIT > REVISION
+  - mkdir build; zip -q -r build/solr_lambda.zip .
+
+deploy:
+- provider: s3
+  access_key_id:
+    secure: XBnhmdNK+HidU1jMGJ3xaTjvDV3qdNWG43r0SEe+6t5jFRHs7Cj/9bHZMl+2JYw9zYMP2ivgI/ECnpnci9xE7O0dKYfek/7hJMEn5HafW/D3uPaPegIwd+A7iWBqGXvO+UlzY6AktQGrMHdkLakzQ5PIFlRPbL2lTDx171PROIdzJiXqrnZt1PI3GiD7IV4qYmU9zdK/0egLYuHGZf96TMHi3bVtr5RwUWGUZR0fFNCoWIVQFEHGhcE/smbRYWCZt+OmAErCRMN0dFb580IkwKJeuBWZ03eXqp6jczYOdZlw/7xiHbA84x1GewoBt8lT29GO6Hr3dbXbCZ1EMq01RuZUVHjm9si0IifnptpeCe00ZJwq4e+Js3ODhjEpeor4LVMgDWE23n7ukF8aeK2+NtFilovdZwdo3nDh25FX9uEhDw2j4S7UtUW9t/7iS1UaAf2qguzUpm+a8B9TgyO9jQT5r4/26RkztiY5ulZablA8Lkf4hwFtUk2o6vj99W03hzlNNH5AITn7ZNS3MjXlww4Y9AGnxnxPAAe1vX4HI2UHJrIoJuLv34qsLYYYX4svNpUDp9vep5PiBc0pmvWkgtOJGKgdJORrSy3sazS18kAERgzfAi+jeO4l3EtjFzRQwO6pyPICUd+eg/6rhxZYjYbGKa6bSNrCwagpj7NrKj8=
+  secret_access_key:
+    secure: M/jkNDsAG8QS06MuPNquVYTIfMN/CYgVUokGoICgaFr2mqo+kxC3cL4FwnfvNosq0hUmDTi5gm3qs3AzRuyPsuuD1i3e6kt5wFLT6GRLpZFrZOqu1pREoWSASbNSi7Fat8GZ1zuGCJMOIUC2K//AQRyvVYpJFhTIfqHub9qL8/2itnHtHTtPlw1kFG5Kj6JfxX659TVPl29q+RiMnRIjRTWCTHENniewkSqt2xjgCD1cwyn0bcLtEv3XQcCOwqSJtTAb2oq/x2zAHECKYCiZdd4lgl3F2rLn5DM2LzFuZ94V3NZVGlmz6MMHqBlYMyXFxw5BLfdGVtlcQ6PcNf8RZC9otDio6WDW01rXcWEsM29Pn7BhEuh3I1Zd2eaGi0NPI0YMb4v/0AmOYGqyFQ3g4tjm8J3nikd5MOGWJ3WUGxexJi6VyT6iK4HH1WVECa6K3A/0HogzpPvGZOUItpg6TAAznbfPFNMYayTM5GqHkj6JUbW8FF2z/LHbIGkZVMLh0ny6I7nC7yut6bQavITaeJYYPP3Y9GoHyjNM12WHt2Adom8v91T90UW7cbwz99SyDo4J+lKMY6UJxYG1HUNYY+Ka3HYXt5pTsLXkPA/k8q6XdiVrIEYznRQT/DA4SBIUWXhu+kalGigGhE3HwOwR/tvSeaRR2ydf2v0APGo/070=
+  bucket: hybox-deployment-artifacts
+  region: us-east-1
+  local_dir: build
+  skip_cleanup: true
+  upload-dir: lambda/current
+  acl: public_read
