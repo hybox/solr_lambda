@@ -30,6 +30,10 @@ exports.handler = function(event, context, callback) {
             return shard.replicas[replicaName].state != "down";
           });
 
+          var downReplicas = Object.keys(shard.replicas).filter(function(replicaName) {
+            return shard.replicas[replicaName].state == "down";
+          });
+
           log.verbose(logPrefix, "Replicas:%j|%j|%j", notDownReplicas, activeReplicas, downReplicas);
 
           for (var i = notDownReplicas.length; i < replicationFactor; i++) {
@@ -55,6 +59,15 @@ exports.handler = function(event, context, callback) {
               });
             });
           }
+
+          downReplicas.forEach(function(replicaName) {
+            log.info(logPrefix + ":" + replicaName + ":delete", "DELETEREPLICA (%s)", replicaName);
+            request(url + "/admin/collections?action=DELETEREPLICA&collection=" + collectionName + "&shard=" + shardName + "&replica=" + replicaName, function(error, response, body) {
+              var logLevel = response.statusCode == 200 ? "verbose" : "warn";
+              log.log(logLevel, logPrefix + ":" + replicaName + ":delete", "GET " + url + "/admin/collections?action=DELETEREPLICA&collection=" + collectionName + "&shard=" + shardName + "&replica=" + replicaName);
+              log.log(logLevel, logPrefix + ":" + replicaName + ":delete", "STATUS: %d", response.statusCode);
+            });
+          });
         });
       });
 
